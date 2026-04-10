@@ -1,7 +1,7 @@
 import sqlite3
 
 DATABASE = "database.db"
-
+#config for database connection and initialization
 
 def get_connection():
     conn = sqlite3.connect(DATABASE)
