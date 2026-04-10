@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GymGuide — Meus Favoritos</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    /* ── HERO DA PÁGINA ─────────────────────────────────────── */
+    .favoritos-hero {
+      text-align: center;
+      padding: 100px 10% 50px;
+      position: relative;
+    }
+
+    .favoritos-hero::before {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: var(--color-accent);
+      margin: 0 auto 28px;
+      box-shadow: 0 0 16px var(--color-accent);
+    }
+
+    .favoritos-hero h1 {
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .favoritos-hero p {
+      color: var(--color-muted);
+      font-size: 16px;
+    }
+
+    /* ── GRID DE FAVORITOS ──────────────────────────────────── */
+    .favoritos-section {
+      padding: 20px 10% 80px;
+    }
+
+    .favoritos-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .fav-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 18px 22px;
+      min-width: 240px;
+      flex: 1 1 260px;
+      max-width: 340px;
+      transition: border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .fav-card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-2px);
+    }
+
+    .fav-card-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .fav-icon {
+      font-size: 22px;
+      color: var(--color-accent);
+      line-height: 1;
+    }
+
+    .fav-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: 0.3px;
+    }
+
+    /* Botão de remover */
+    .fav-remove-btn {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-btn);
+      color: var(--color-muted);
+      font-size: 18px;
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .fav-remove-btn:hover {
+      border-color: #ff4d4d;
+      color: #ff4d4d;
+      background: rgba(255, 77, 77, 0.08);
+    }
+
+    /* ── ESTADO VAZIO ───────────────────────────────────────── */
+    .favoritos-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--color-muted);
+    }
+
+    .favoritos-empty .empty-icon {
+      font-size: 52px;
+      display: block;
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+
+    .favoritos-empty h3 {
+      font-size: 20px;
+      color: var(--color-text);
+      margin-bottom: 10px;
+    }
+
+    .favoritos-empty p {
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    /* ── BOTÃO VOLTAR ───────────────────────────────────────── */
+    .btn-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-btn);
+      color: var(--color-text);
+      text-decoration: none;
+      font-family: var(--font-body);
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all var(--transition-fast);
+      margin-bottom: 32px;
+      cursor: pointer;
+    }
+
+    .btn-voltar:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    /* ── CONTADOR ───────────────────────────────────────────── */
+    .favoritos-count {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 4px;
+    }
+
+    .favoritos-count span {
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    /* ── TOAST NOTIFICATION ─────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-left: 3px solid var(--color-accent);
+      color: var(--color-text);
+      padding: 14px 20px;
+      border-radius: var(--radius-card);
+      font-size: 14px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .favoritos-subtitle {
+      margin-top: 28px;
+      margin-bottom: 14px;
+      font-size: 20px;
+      color: var(--color-text);
+    }
+
+    /* Botões de remoção para fichas e dietas */
+    .fav-remove-btn,
+    .fav-remove-training-btn,
+    .fav-remove-diet-btn {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-btn);
+      color: var(--color-muted);
+      font-size: 18px;
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .fav-remove-btn:hover,
+    .fav-remove-training-btn:hover,
+    .fav-remove-diet-btn:hover {
+      border-color: #ff4d4d;
+      color: #ff4d4d;
+      background: rgba(255, 77, 77, 0.08);
+    }
+
+    /* Cards de exercício */
+    .exercise-fav-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .ex-fav-card {
+      width: 260px;
+      border-radius: var(--radius-card);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .ex-fav-card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--color-accent);
+    }
+
+    .ex-fav-card__media {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .ex-fav-card__media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ex-fav-card__no-video {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+    }
+
+    .ex-fav-card__body {
+      padding: 12px 14px 16px;
+    }
+
+    .ex-fav-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .ex-fav-card__name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 6px;
+    }
+
+    .ex-fav-card__desc {
+      font-size: 12px;
+      color: var(--color-muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .ex-fav-card .fav-remove-btn {
+      width: auto;
+      height: auto;
+      font-size: 12px;
+      padding: 6px 14px;
+      text-transform: uppercase;
+    }
+
+    /* Cards de dieta */
+    .diet-fav-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .diet-fav-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 18px 20px 20px;
+      flex: 1 1 300px;
+      max-width: 420px;
+      transition: border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .diet-fav-card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-2px);
+    }
+
+    .diet-fav-card__header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .diet-fav-card__header>div {
+      flex: 1;
+    }
+
+    .diet-fav-card__list {
+      list-style: none;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      padding: 8px 0;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .diet-fav-card__item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .diet-item-name {
+      flex: 1;
+      color: var(--color-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .diet-item-qty {
+      color: var(--color-muted);
+      font-size: 12px;
+    }
+
+    .diet-item-cal {
+      color: var(--color-accent);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .diet-fav-card__macros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .macro-pill {
+      flex: 1 1 80px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-align: center;
+    }
+
+    .macro-label {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    .macro-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    .macro-pill--prot .macro-value {
+      color: #c8ff00;
+    }
+
+    .macro-pill--carb .macro-value {
+      color: #f5a623;
+    }
+
+    .macro-pill--fat .macro-value {
+      color: #ff7b5a;
+    }
+    
+    /* ── MODAL DE CONFIRMAÇÃO ───────────────────────────────────── */
+.confirm-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10000;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.confirm-overlay.show { opacity: 1; pointer-events: all; }
+.confirm-box {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+  border-radius: var(--radius-card);
+  padding: 32px 36px; max-width: 380px; width: 90%;
+  transform: translateY(12px) scale(0.97);
+  transition: transform 0.2s ease;
+  text-align: center;
+}
+.confirm-overlay.show .confirm-box { transform: translateY(0) scale(1); }
+.confirm-box__icon { font-size: 36px; margin-bottom: 14px; display: block; }
+.confirm-box h3 { font-size: 18px; color: var(--color-text); margin-bottom: 8px; }
+.confirm-box p { font-size: 13px; color: var(--color-muted); margin-bottom: 28px; line-height: 1.5; }
+.confirm-box__actions { display: flex; gap: 12px; justify-content: center; }
+.confirm-btn-cancel {
+  flex: 1; padding: 10px 20px; background: transparent;
+  border: 1px solid var(--color-border); border-radius: var(--radius-btn);
+  color: var(--color-muted); font-family: var(--font-body);
+  font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.confirm-btn-cancel:hover { border-color: var(--color-text); color: var(--color-text); }
+.confirm-btn-confirm {
+  flex: 1; padding: 10px 20px; background: #ff4d4d;
+  border: 1px solid #ff4d4d; border-radius: var(--radius-btn);
+  color: #fff; font-family: var(--font-body);
+  font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; transition: all var(--transition-fast);
+}
+.confirm-btn-confirm:hover { background: #e03e3e; border-color: #e03e3e; }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ── HEADER ───────────────────────────────────────────────── -->
+  <header class="header">
+    <img src="/static/assets/fotos/logo.png" alt="Logo GymGuide" class="logo" />
+    <nav class="nav">
+      <a href="/#exercicios">Exercícios</a>
+      <a href="/#dieta">Dieta</a>
+      <a href="/#motivacao">Motivação</a>
+      <div class="nav-auth">
+        {% if usuario_email %}
+        <span class="nav-user">{{ usuario_email }}</span>
+        <a href="/logout" class="btn btn-outline nav-auth-btn">Sair</a>
+        {% else %}
+        <a href="/login" class="btn btn-outline nav-auth-btn">Login</a>
+        <a href="/cadastro" class="btn btn-primary nav-auth-btn">Cadastro</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ── HERO ─────────────────────────────────────────────── -->
+    <div class="favoritos-hero">
+      <h1>Meus Favoritos</h1>
+      <p>Seus exercícios salvos para acessar rapidamente.</p>
+    </div>
+
+    <!-- ── CONTEÚDO ─────────────────────────────────────────── -->
+    <section class="favoritos-section">
+
+      <a href="/" class="btn-voltar">← Voltar ao início</a>
+
+      {% if favoritos or fichas or dietas %}
+
+      {% if favoritos %}
+      <h2 class="favoritos-subtitle">Exercícios Favoritados</h2>
+
+      {% set ex_map = {
+      "Supino Inclinado": {"category": "Peito Superior", "level": "iniciante", "level_label": "Iniciante", "video":
+      "/static/assets/videos/supinoinclinado.mp4", "desc": "Trabalha a parte superior do peitoral. Mantenha as escápulas
+      retraídas e desça a barra de forma controlada."},
+      "Remada Curvada à Barra": {"category": "Costas", "level": "avancado", "level_label": "Avançado", "video":
+      "/static/assets/videos/Remadacurvadabarra.mp4", "desc": "Exercício composto para espessura das costas. Mantenha a
+      coluna neutra e puxe a barra em direção ao abdômen."},
+      "Leg Press 45": {"category": "Pernas", "level": "intermediario","level_label": "Intermediário","video":
+      "/static/assets/videos/Legpress45.mp4", "desc": "Fortalece quadríceps, glúteos e posteriores. Não trave os joelhos
+      no topo do movimento."}
+      } %}
+
+      <div class="exercise-fav-grid" id="favoritos-grid">
+        {% for exercicio in favoritos %}
+        {% set info = ex_map.get(exercicio, {}) %}
+        <div class="ex-fav-card" data-exercise="{{ exercicio }}">
+          <div class="ex-fav-card__media">
+            {% if info.get("video") %}
+            <video src="{{ info.video }}" muted loop playsinline></video>
+            {% else %}
+            <div class="ex-fav-card__no-video"></div>
+            {% endif %}
+          </div>
+          <div class="ex-fav-card__body">
+            <div class="ex-fav-card__tags">
+              {% if info.get("category") %}
+              <span class="card-tag">{{ info.category }}</span>
+              {% endif %}
+              {% if info.get("level") %}
+              <span class="card-tag card-tag--nivel {{ info.level }}">{{ info.level_label }}</span>
+              {% endif %}
+            </div>
+            <h3 class="ex-fav-card__name">{{ exercicio }}</h3>
+            {% if info.get("desc") %}
+            <p class="ex-fav-card__desc">{{ info.desc }}</p>
+            {% endif %}
+            <button class="fav-remove-btn" data-exercise="{{ exercicio }}">✕ Remover</button>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if fichas %}
+      <h2 class="favoritos-subtitle">Fichas de Treino Salvas</h2>
+      <div class="favoritos-grid">
+        {% for ficha in fichas %}
+        <div class="fav-card" data-training-id="{{ ficha['id'] }}">
+          <div class="fav-card-info">
+            <span class="fav-icon"></span>
+            <div>
+              <div class="fav-name">{{ ficha["title"] }}</div>
+              {% if ficha["description"] %}
+              <small style="color: var(--color-muted);">{{ ficha["description"] }}</small>
+              {% endif %}
+            </div>
+          </div>
+
+          <button class="fav-remove-training-btn" data-training-id="{{ ficha['id'] }}" title="Remover ficha">✕</button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if dietas %}
+      <h2 class="favoritos-subtitle">Dietas Salvas</h2>
+      <div class="diet-fav-grid">
+        {% for dieta in dietas %}
+        <div class="diet-fav-card" data-diet-id="{{ dieta['id'] }}">
+
+          <div class="diet-fav-card__header">
+            <span class="fav-icon"></span>
+            <div>
+              <div class="fav-name">{{ dieta["title"] }}</div>
+              <small style="color: var(--color-muted); font-size: 12px;">{{ dieta["items"] | length }} alimento{{ "s" if
+                dieta["items"] | length != 1 else "" }}</small>
+            </div>
+            <button class="fav-remove-diet-btn" data-diet-id="{{ dieta['id'] }}">✕</button>
+          </div>
+
+          {% if dieta["items"] %}
+          <ul class="diet-fav-card__list">
+            {% for item in dieta["items"] %}
+            <li class="diet-fav-card__item">
+              <span class="diet-item-name">{{ item.food_name }}</span>
+              <span class="diet-item-qty">{{ item.quantity }}g</span>
+              <span class="diet-item-cal">{{ item.calories | int }} kcal</span>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <div class="diet-fav-card__macros">
+            <div class="macro-pill">
+              <span class="macro-label">Calorias</span>
+              <span class="macro-value">{{ dieta.total_calories }} kcal</span>
+            </div>
+            <div class="macro-pill macro-pill--prot">
+              <span class="macro-label">Proteína</span>
+              <span class="macro-value">{{ dieta.total_protein }}g</span>
+            </div>
+            <div class="macro-pill macro-pill--carb">
+              <span class="macro-label">Carbs</span>
+              <span class="macro-value">{{ dieta.total_carbs }}g</span>
+            </div>
+            <div class="macro-pill macro-pill--fat">
+              <span class="macro-label">Gordura</span>
+              <span class="macro-value">{{ dieta.total_fats }}g</span>
+            </div>
+          </div>
+          {% endif %}
+
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% else %}
+      <div class="favoritos-empty">
+        <span class="empty-icon">♡</span>
+        <h3>Nada salvo ainda</h3>
+        <p>Seus exercícios, fichas e dietas salvos vão aparecer aqui.</p>
+        <a href="/#exercicios" class="btn-voltar">Explorar</a>
+      </div>
+      {% endif %}
+
+    </section>
+
+    <!-- ── FOOTER ─────────────────────────────────────────────── -->
+    <footer class="footer"
+      style="text-align:center; padding: 24px; color: var(--color-muted); font-size: 13px; border-top: 1px solid var(--color-border);">
+      <p>© 2026 GymGuide</p>
+    </footer>
+
+    <!-- Toast de feedback -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Toast de feedback -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Modal de confirmação -->
+    <div class="confirm-overlay" id="confirmOverlay">
+      <div class="confirm-box">
+        <span class="confirm-box__icon" id="confirmIcon">!</span>
+        <h3 id="confirmTitle">Remover item</h3>
+        <p id="confirmMsg">Tem certeza que deseja remover este item?</p>
+        <div class="confirm-box__actions">
+          <button class="confirm-btn-cancel" id="confirmCancel">Cancelar</button>
+          <button class="confirm-btn-confirm" id="confirmOk">Remover</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ── HOVER VÍDEO ─────────────────────────────────────────────
+      document.querySelectorAll(".ex-fav-card").forEach(card => {
+        const video = card.querySelector("video");
+        if (!video) return;
+        card.addEventListener("mouseenter", () => video.play());
+        card.addEventListener("mouseleave", () => { video.pause(); video.currentTime = 0; });
+      });
+
+      // ── TOAST ───────────────────────────────────────────────────
+      function showToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2500);
+      }
+
+      // ── MODAL ────────────────────────────────────────────────────
+      const overlay = document.getElementById("confirmOverlay");
+      const confirmOk = document.getElementById("confirmOk");
+      const confirmCancel = document.getElementById("confirmCancel");
+      let pendingAction = null;
+
+      function openConfirm({ icon, title, msg, onConfirm }) {
+        document.getElementById("confirmIcon").textContent  = icon  || "!";
+        document.getElementById("confirmTitle").textContent = title || "Remover item";
+        document.getElementById("confirmMsg").textContent   = msg   || "Tem certeza?";
+        pendingAction = onConfirm;
+        overlay.classList.add("show");
+      }
+
+      function closeConfirm() {
+        overlay.classList.remove("show");
+        pendingAction = null;
+      }
+
+      confirmCancel.addEventListener("click", closeConfirm);
+      overlay.addEventListener("click", e => { if (e.target === overlay) closeConfirm(); });
+      confirmOk.addEventListener("click", () => { if (pendingAction) pendingAction(); closeConfirm(); });
+
+      // ── REMOVER EXERCÍCIO ────────────────────────────────────────
+      document.querySelectorAll(".fav-remove-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+          const exerciseName = this.dataset.exercise;
+          const card = this.closest(".ex-fav-card");
+
+          openConfirm({
+            icon: "!", title: "Remover exercício",
+            msg: `Deseja remover "${exerciseName}" dos favoritos?`,
+            onConfirm: () => {
+              fetch("/remove_favorite_exercise", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ exercise_name: exerciseName })
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  card.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+                  card.style.opacity = "0"; card.style.transform = "scale(0.95)";
+                  setTimeout(() => {
+                    card.remove();
+                    showToast("Exercício removido dos favoritos");
+                    const grid = document.getElementById("favoritos-grid");
+                    const remaining = grid ? grid.querySelectorAll(".ex-fav-card").length : 0;
+                    if (remaining === 0 && !document.querySelector(".fav-card") && !document.querySelector(".diet-fav-card")) location.reload();
+                  }, 300);
+                }
+              })
+              .catch(() => showToast("Erro ao remover. Tente novamente."));
+            }
+          });
+        });
+      });
+
+      // ── REMOVER FICHA ────────────────────────────────────────────
+      document.querySelectorAll(".fav-remove-training-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+          const trainingId = this.dataset.trainingId;
+          const card = this.closest(".fav-card");
+
+          openConfirm({
+            icon: "!", title: "Remover ficha",
+            msg: "Deseja remover esta ficha de treino dos favoritos?",
+            onConfirm: () => {
+              fetch("/remove_training_plan", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ training_id: trainingId })
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  card.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+                  card.style.opacity = "0"; card.style.transform = "scale(0.95)";
+                  setTimeout(() => {
+                    card.remove();
+                    showToast("Ficha removida dos favoritos");
+                    if (!document.querySelector(".ex-fav-card") && !document.querySelector(".fav-card") && !document.querySelector(".diet-fav-card")) location.reload();
+                  }, 300);
+                } else {
+                  showToast(data.message || "Erro ao remover ficha.");
+                }
+              })
+              .catch(() => showToast("Erro ao remover ficha."));
+            }
+          });
+        });
+      });
+
+      // ── REMOVER DIETA ─────────────────────────────────────────────
+      document.querySelectorAll(".fav-remove-diet-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+          const dietId = this.dataset.dietId;
+          const card = this.closest(".diet-fav-card");
+
+          openConfirm({
+            icon: "!", title: "Remover dieta",
+            msg: "Deseja remover esta dieta dos favoritos?",
+            onConfirm: () => {
+              fetch("/remove_diet", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ diet_id: dietId })
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  card.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+                  card.style.opacity = "0"; card.style.transform = "scale(0.95)";
+                  setTimeout(() => {
+                    card.remove();
+                    showToast("Dieta removida dos favoritos");
+                    if (!document.querySelector(".ex-fav-card") && !document.querySelector(".fav-card") && !document.querySelector(".diet-fav-card")) location.reload();
+                  }, 300);
+                } else {
+                  showToast(data.message || "Erro ao remover dieta.");
+                }
+              })
+              .catch(() => showToast("Erro ao remover dieta."));
+            }
+          });
+        });
+      });
+    </script>
+
+</body>
+</html>

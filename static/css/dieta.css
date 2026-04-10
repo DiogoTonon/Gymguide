@@ -1,0 +1,751 @@
+/* ─── DIETA ───────────────────────────────────────────── */
+.diet {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.section-kicker {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-accent);
+}
+
+/* ─── HERO SIMPLES ────────────────────────────────────── */
+.diet-hero {
+  display: block;
+}
+
+.diet-hero-content {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 32px;
+}
+
+.diet-hero-content h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.1;
+  margin-bottom: 12px;
+  max-width: 720px;
+}
+
+.diet-intro {
+  color: var(--color-muted);
+  line-height: 1.7;
+  max-width: 620px;
+  font-size: 15px;
+  margin: 0;
+}
+
+/* ─── CARDS DE ESTRATÉGIA ─────────────────────────────── */
+.diet-strategies {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.diet-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.diet-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-hot);
+}
+
+.diet-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  opacity: 0.95;
+}
+
+.diet-card--bulking::before {
+  background: linear-gradient(90deg, var(--color-accent), transparent);
+}
+
+.diet-card--cutting::before {
+  background: linear-gradient(90deg, #6effc4, transparent);
+}
+
+.diet-card--maintenance::before {
+  background: linear-gradient(90deg, #8cb8ff, transparent);
+}
+
+.diet-card-top {
+  margin-bottom: 12px;
+}
+
+.diet-badge {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.diet-card h3 {
+  font-size: 23px;
+  margin-bottom: 10px;
+}
+
+.diet-card p {
+  color: var(--color-muted);
+  line-height: 1.7;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.diet-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 18px 0 14px;
+}
+
+.diet-meta div {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.meta-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+}
+
+.diet-meta strong {
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.macro-table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.macro-table th,
+.macro-table td {
+  text-align: left;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.macro-table th {
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.macro-table td {
+  color: var(--color-text);
+}
+
+.diet-note {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.diet-save-section {
+  margin-top: 28px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+#diet-title {
+  padding: 10px 14px;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+  min-width: 240px;
+}
+
+#save-diet-btn {
+  padding: 10px 18px;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-accent);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+#save-diet-btn:hover {
+  background: var(--color-accent);
+  color: #000;
+  box-shadow: 0 0 12px var(--color-accent);
+}
+
+/* ─── CALCULADORA ─────────────────────────────────────── */
+.calorie-calculator {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 30px;
+}
+
+.calculator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.calculator-header h3 {
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+.calculator-header p {
+  max-width: 480px;
+  color: var(--color-muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.calc-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.calc-row label {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.calc-row input,
+.calc-row select {
+  padding: 14px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-btn);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.calc-row input:focus,
+.calc-row select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-dim);
+}
+
+.calorie-calculator #btn-calcular {
+  margin-top: 6px;
+  padding: 13px 28px;
+  background: var(--color-accent);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.calorie-calculator #btn-calcular:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+#calc-result {
+  display: none;
+  margin-top: 22px;
+}
+
+#calc-result.visible {
+  display: block;
+}
+
+.calc-result-card {
+  border: 1px solid rgba(200, 255, 0, 0.2);
+  background: linear-gradient(180deg, rgba(200, 255, 0, 0.08), rgba(255, 255, 255, 0.02));
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.calc-result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.calc-result-top h4 {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.calc-result-top p {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.calc-kcal-box {
+  min-width: 160px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(200, 255, 0, 0.18);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.calc-kcal-box span {
+  display: block;
+  font-size: 11px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.calc-kcal-box strong {
+  font-size: 28px;
+  color: var(--color-accent);
+}
+
+.calc-macros-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.calc-macro-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.calc-macro-item span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+}
+
+.calc-macro-item strong {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 4px;
+  color: var(--color-text);
+}
+
+.calc-macro-item small {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.calc-observation {
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ─── MONTE SUA DIETA ─────────────────────────────────── */
+.diet-builder {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 30px;
+}
+
+.diet-builder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.diet-builder-header h3 {
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+.diet-builder-header p {
+  max-width: 500px;
+  color: var(--color-muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.diet-builder-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  gap: 14px;
+  align-items: end;
+  margin-bottom: 22px;
+}
+
+.builder-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.builder-field label {
+  font-size: 11px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.builder-field select,
+.builder-field input {
+  padding: 14px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-btn);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.builder-field select:focus,
+.builder-field input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-dim);
+}
+
+.builder-action button {
+  padding: 13px 24px;
+  background: var(--color-accent);
+  color: #000;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.builder-action button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.diet-builder-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  margin-bottom: 22px;
+}
+
+.diet-builder-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: var(--color-surface-2);
+}
+
+.diet-builder-table th,
+.diet-builder-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+}
+
+.diet-builder-table th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.diet-builder-table td {
+  color: var(--color-text);
+}
+
+.empty-row td {
+  text-align: center;
+  color: var(--color-muted);
+  padding: 24px 16px;
+}
+
+.remove-food-btn {
+  padding: 8px 12px;
+  background: transparent;
+  color: #ff7a7a;
+  border: 1px solid rgba(255, 122, 122, 0.28);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.remove-food-btn:hover {
+  background: rgba(255, 122, 122, 0.08);
+  transform: translateY(-1px);
+}
+
+.diet-builder-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.summary-card {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.summary-card span {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 26px;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.summary-card small {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.diet-goal-comparison {
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(200, 255, 0, 0.04), rgba(255, 255, 255, 0.02));
+}
+
+.comparison-empty {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.comparison-header {
+  margin-bottom: 18px;
+}
+
+.comparison-header h4 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.comparison-header p {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.comparison-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.comparison-item span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+}
+
+.comparison-item strong {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.comparison-item small {
+  display: block;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.status-ok {
+  color: #7cffb2;
+}
+
+.status-low {
+  color: #ffd36e;
+}
+
+.status-high {
+  color: #ff8e8e;
+}
+
+/* ─── RESPONSIVO ──────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .diet-strategies,
+  .calc-macros-grid,
+  .diet-builder-summary,
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .calculator-header,
+  .calc-result-top,
+  .diet-builder-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .diet-builder-form {
+    grid-template-columns: 1fr;
+  }
+
+  .calc-kcal-box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .diet-hero-content,
+  .calorie-calculator,
+  .diet-builder {
+    padding: 22px;
+  }
+
+  .diet-card {
+    padding: 22px;
+  }
+
+  .diet-hero-content h2,
+  .diet-card h3,
+  .calculator-header h3,
+  .diet-builder-header h3 {
+    font-size: 22px;
+  }
+
+  .diet-intro,
+  .calculator-header p,
+  .diet-builder-header p {
+    font-size: 14px;
+  }
+
+  .summary-card strong,
+  .comparison-item strong,
+  .calc-macro-item strong {
+    font-size: 22px;
+  }
+}
+
+.toggle-section-btn {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface-2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.toggle-section-btn:hover {
+  background: var(--color-border);
+}
+
+.toggle-arrow {
+  width: 10px;
+  height: 10px;
+  display: block;
+  border-right: 2px solid var(--color-text);
+  border-bottom: 2px solid var(--color-text);
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
+  margin-top: -2px;
+}
+
+.toggle-section-btn.closed .toggle-arrow {
+  transform: rotate(-135deg);
+  margin-top: 2px;
+}
+
+.collapsible {
+  overflow: hidden;
+  max-height: 5000px;
+  opacity: 1;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+}
+
+.collapsible.is-collapsed {
+  max-height: 0;
+  opacity: 0;
+}

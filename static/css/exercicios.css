@@ -1,0 +1,178 @@
+/* ─── 6. FILTROS DE CATEGORIA ──────────────────────────────── */
+.category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+/* ─── SELECTOR DE NÍVEL ─────────────────────────────────────── */
+.nivel-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.nivel-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+#nivel-select {
+  padding: 8px 36px 8px 14px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-btn);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  appearance: none;
+  /* Setinha customizada */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c8ff00' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color var(--transition-fast);
+}
+
+#nivel-select:hover,
+#nivel-select:focus {
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+.filter-btn {
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-btn);
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+/* Botão ativo — categoria selecionada */
+.filter-btn.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #000;
+  font-weight: 700;
+}
+
+/* ─── 7. GRID E CARD DE EXERCÍCIO ───────────────────────────── */
+.exercise-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.exercise-card {
+  width: 260px;
+  border-radius: var(--radius-card);
+  overflow: visible;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+  flex-shrink: 0;
+  position: relative; 
+  padding-bottom: 22px;
+}
+
+.exercise-card:hover {
+  border-color: var(--color-accent);
+}
+
+.exercise-card.ativo {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 0 1px var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.card-video-wrap {
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+  background: #000;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+
+.card-video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-info {
+  padding: 10px 14px 12px;
+}
+
+.card-tag {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-dim);
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-bottom: 6px;
+}
+
+/* Tag de nível — cor muda por nível */
+.card-tag--nivel { margin-left: 6px; }
+
+.card-tag--nivel.iniciante {
+  color: #00c896;
+  border-color: rgba(0, 200, 150, 0.3);
+}
+
+.card-tag--nivel.intermediario {
+  color: #f5a623;
+  border-color: rgba(245, 166, 35, 0.3);
+}
+
+.card-tag--nivel.avancado {
+  color: #ff4d4d;
+  border-color: rgba(255, 77, 77, 0.3);
+}
+
+.card-details {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height 0.6s ease,
+    opacity 0.5s ease;
+  will-change: max-height, opacity;
+}
+
+.exercise-card.ativo .card-details {
+  max-height: 300px;
+  opacity: 1;
+}
+
+.card-details p {
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-top: 6px;
+}
+
+.exercise-card.hidden {
+  display: none;
+}

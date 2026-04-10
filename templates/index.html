@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GymGuide</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/exercicios.css" />
+  <link rel="stylesheet" href="/static/css/ficha.css" />
+  <link rel="stylesheet" href="/static/css/dieta.css" />
+  <link rel="stylesheet" href="/static/css/motivacao.css" />
+</head>
+
+<body>
+
+  <!-- ── HEADER ─────────────────────────────────────────────── -->
+  <header class="header">
+    <img src="/static/assets/fotos/logo.png" alt="Logo GymGuide" class="logo" />
+    <nav class="nav">
+      <a href="#ficha">Ficha</a>
+      <a href="#exercicios">Exercícios</a>
+      <a href="#dieta">Dieta</a>
+      <a href="#motivacao">Motivação</a>
+
+      <div class="nav-auth">
+        {% if usuario_email %}
+        <a href="/favoritos" class="nav-fav-link">♥ Favoritos</a>
+        <span class="nav-user">{{ usuario_email }}</span>
+        <a href="/logout" class="btn btn-outline nav-auth-btn">Sair</a>
+        {% else %}
+        <a href="/login" class="btn btn-outline nav-auth-btn">Login</a>
+        <a href="/cadastro" class="btn btn-primary nav-auth-btn">Cadastro</a>
+        {% endif %}
+      </div>
+
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ── HERO ───────────────────────────────────────────────── -->
+    <section class="hero">
+      <h2>Seu guia interativo de academia</h2>
+      <p>Explore exercícios, aprenda com vídeos e evolua seu treino.</p>
+    </section>
+
+    <!-- TEXTO PRINCIPAL -->
+    <div class="about-intro center">
+      <p class="about-main">
+        O GymGuide foi criado para simplificar o seu treino.
+      </p>
+
+      <p>
+        Aqui você monta sua dieta, gera fichas personalizadas e organiza tudo
+        de forma prática, sem complicação e sem perder tempo.
+      </p>
+
+      <p>
+        Um sistema direto ao ponto, pensado para quem quer evoluir de verdade.
+      </p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ── FICHA DE TREINO ────────────────────────────────────── -->
+    <section id="ficha" class="ficha-section">
+      <h2>Monte sua Ficha</h2>
+      <p class="ficha-subtitle">Selecione o grupo muscular e seu nível para gerar sua planilha semanal.</p>
+
+      <div class="ficha-selectors">
+        <select id="ficha-musculo">
+          <option value="">Grupo muscular</option>
+          <option value="peito">Peito</option>
+          <option value="costas">Costas</option>
+          <option value="pernas">Pernas</option>
+          <option value="ombros">Ombros</option>
+        </select>
+
+        <select id="ficha-nivel">
+          <option value="">Nível</option>
+          <option value="iniciante">Iniciante</option>
+          <option value="intermediario">Intermediário</option>
+          <option value="avancado">Avançado</option>
+        </select>
+
+        <button id="btn-gerar-ficha">Gerar Ficha</button>
+      </div>
+
+      <div id="ficha-resultado"></div>
+
+      <div class="training-save-section">
+
+        <input type="text" id="training-title" placeholder="Nome da ficha (ex: Treino A)">
+
+        <button id="save-training-btn" type="button"> Salvar ficha </button>
+
+      </div>
+
+    </section>
+
+    <!-- ── EXERCÍCIOS ─────────────────────────────────────────── -->
+    <section id="exercicios" class="exercises">
+      <h2>Exercícios</h2>
+
+      <!-- Filtros de categoria -->
+      <div class="category-filters">
+        <button class="filter-btn active" data-category="todos">Todos</button>
+        <button class="filter-btn" data-category="peito">Peito</button>
+        <button class="filter-btn" data-category="costas">Costas</button>
+        <button class="filter-btn" data-category="pernas">Pernas</button>
+        <button class="filter-btn" data-category="ombros">Ombros</button>
+      </div>
+
+      <!-- Filtros de nível -->
+      <div class="nivel-select-wrap">
+        <label class="nivel-label">Nível</label>
+        <select id="nivel-select">
+          <option value="todos">Todos os níveis</option>
+          <option value="iniciante">Iniciante</option>
+          <option value="intermediario">Intermediário</option>
+          <option value="avancado">Avançado</option>
+        </select>
+      </div>
+
+      <!-- Grid de cards -->
+      <div class="exercise-grid">
+
+        <div class="exercise-card" data-category="peito" data-level="iniciante">
+          <div class="card-video-wrap">
+            <video src="/static/assets/videos/supinoinclinado.mp4" muted loop playsinline></video>
+          </div>
+          <div class="card-info">
+            <span class="card-tag">Peito Superior</span>
+            <span class="card-tag card-tag--nivel iniciante">Iniciante</span>
+            <div class="card-details">
+              <h3>Supino Inclinado</h3>
+              <p>Trabalha a parte superior do peitoral. Mantenha as escápulas retraídas e desça o halter de forma
+                controlada.</p>
+              <button class="favorite-btn" data-exercise="Supino Inclinado">♡</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="exercise-card" data-category="costas" data-level="avancado">
+          <div class="card-video-wrap">
+            <video src="/static/assets/videos/Remadacurvadabarra.mp4" muted loop playsinline></video>
+          </div>
+          <div class="card-info">
+            <span class="card-tag">Costas</span>
+            <span class="card-tag card-tag--nivel avancado">Avançado</span>
+            <div class="card-details">
+              <h3>Remada Curvada à Barra</h3>
+              <p>Exercício composto para espessura das costas. Mantenha a coluna neutra e puxe a barra em direção ao
+                abdômen.</p>
+              <button class="favorite-btn" data-exercise="Remada Curvada à Barra">♡</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="exercise-card" data-category="pernas" data-level="intermediario">
+          <div class="card-video-wrap">
+            <video src="/static/assets/videos/Legpress45.mp4" muted loop playsinline></video>
+          </div>
+          <div class="card-info">
+            <span class="card-tag">Pernas</span>
+            <span class="card-tag card-tag--nivel intermediario">Intermediário</span>
+            <div class="card-details">
+              <h3>Leg Press 45</h3>
+              <p>Fortalece quadríceps, glúteos e posteriores. Não trave os joelhos no topo do movimento.</p>
+              <button class="favorite-btn" data-exercise="Leg Press 45">♡</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="dieta" class="diet">
+
+      <div class="diet-hero diet-hero--simple">
+        <div class="diet-hero-content">
+          <span class="section-kicker">Dieta</span>
+          <h2>Monte uma dieta alinhada ao seu objetivo</h2>
+          <p class="diet-intro">
+            Use a calculadora para definir sua meta diária e simule refeições com base em calorias e macronutrientes.
+          </p>
+        </div>
+      </div>
+
+      <div class="diet-strategies">
+        <div class="diet-card diet-card--bulking">
+          <div class="diet-card-top">
+            <span class="diet-badge">Ganho de massa</span>
+            <h3>Bulking</h3>
+          </div>
+          <p>
+            Estratégia com superávit calórico controlado para favorecer hipertrofia e melhora de performance.
+          </p>
+
+          <div class="diet-meta">
+            <div>
+              <span class="meta-label">Calorias</span>
+              <strong>+300 a +500 kcal</strong>
+            </div>
+            <div>
+              <span class="meta-label">Proteína</span>
+              <strong>2.0–2.4 g/kg</strong>
+            </div>
+          </div>
+
+          <table class="macro-table">
+            <thead>
+              <tr>
+                <th>Macro</th>
+                <th>Faixa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Proteína</td>
+                <td>2.0–2.4 g/kg</td>
+              </tr>
+              <tr>
+                <td>Carboidrato</td>
+                <td>4.0–6.0 g/kg</td>
+              </tr>
+              <tr>
+                <td>Gordura</td>
+                <td>1.0–1.2 g/kg</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="diet-note">
+            <strong>Erro comum:</strong> exagerar nas calorias e ganhar gordura rápido demais.
+          </div>
+        </div>
+
+        <div class="diet-card diet-card--cutting">
+          <div class="diet-card-top">
+            <span class="diet-badge">Perda de gordura</span>
+            <h3>Cutting</h3>
+          </div>
+          <p>
+            Estratégia com déficit calórico moderado para reduzir gordura corporal tentando preservar massa muscular.
+          </p>
+
+          <div class="diet-meta">
+            <div>
+              <span class="meta-label">Calorias</span>
+              <strong>-300 a -500 kcal</strong>
+            </div>
+            <div>
+              <span class="meta-label">Proteína</span>
+              <strong>2.2–2.6 g/kg</strong>
+            </div>
+          </div>
+
+          <table class="macro-table">
+            <thead>
+              <tr>
+                <th>Macro</th>
+                <th>Faixa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Proteína</td>
+                <td>2.2–2.6 g/kg</td>
+              </tr>
+              <tr>
+                <td>Carboidrato</td>
+                <td>2.0–3.0 g/kg</td>
+              </tr>
+              <tr>
+                <td>Gordura</td>
+                <td>0.8–1.0 g/kg</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="diet-note">
+            <strong>Erro comum:</strong> cortar calorias demais e prejudicar treino, recuperação e adesão.
+          </div>
+        </div>
+
+        <div class="diet-card diet-card--maintenance">
+          <div class="diet-card-top">
+            <span class="diet-badge">Estabilidade</span>
+            <h3>Manutenção</h3>
+          </div>
+          <p>
+            Ideal para manter peso, consolidar resultados e até trabalhar recomposição corporal com mais equilíbrio.
+          </p>
+
+          <div class="diet-meta">
+            <div>
+              <span class="meta-label">Calorias</span>
+              <strong>Próximo ao gasto diário</strong>
+            </div>
+            <div>
+              <span class="meta-label">Proteína</span>
+              <strong>1.8–2.2 g/kg</strong>
+            </div>
+          </div>
+
+          <table class="macro-table">
+            <thead>
+              <tr>
+                <th>Macro</th>
+                <th>Faixa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Proteína</td>
+                <td>1.8–2.2 g/kg</td>
+              </tr>
+              <tr>
+                <td>Carboidrato</td>
+                <td>3.0–4.5 g/kg</td>
+              </tr>
+              <tr>
+                <td>Gordura</td>
+                <td>0.8–1.0 g/kg</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="diet-note">
+            <strong>Erro comum:</strong> comer “no olho” e perder o controle do consumo ao longo da semana.
+          </div>
+        </div>
+      </div>
+
+      <div class="calorie-calculator">
+        <div class="calculator-header">
+          <div>
+            <span class="section-kicker">Ferramenta prática</span>
+            <h3>Calculadora de calorias e macros</h3>
+            <p>
+              Use como ponto de partida e ajuste com base no seu peso, desempenho e evolução semanal.
+            </p>
+          </div>
+
+          <button type="button" class="toggle-section-btn" data-target="calc-content">
+            <span class="toggle-arrow">⌄</span>
+          </button>
+        </div>
+
+        <div id="calc-content" class="collapsible">
+          <div class="calc-row">
+            <label>
+              Peso (kg)
+              <input type="number" id="calc-peso" placeholder="Ex: 80" min="30" max="250" />
+            </label>
+
+            <label>
+              Altura (cm)
+              <input type="number" id="calc-altura" placeholder="Ex: 175" min="100" max="250" />
+            </label>
+
+            <label>
+              Idade
+              <input type="number" id="calc-idade" placeholder="Ex: 25" min="10" max="100" />
+            </label>
+          </div>
+
+          <div class="calc-row">
+            <label>
+              Sexo
+              <select id="calc-sexo">
+                <option value="m">Masculino</option>
+                <option value="f">Feminino</option>
+              </select>
+            </label>
+
+            <label>
+              Nível de atividade
+              <select id="calc-atividade">
+                <option value="1.2">Sedentário</option>
+                <option value="1.375">Leve (1–3x/semana)</option>
+                <option value="1.55" selected>Moderado (3–5x/semana)</option>
+                <option value="1.725">Intenso (6–7x/semana)</option>
+                <option value="1.9">Atleta / muito alto</option>
+              </select>
+            </label>
+
+            <label>
+              Objetivo
+              <select id="calc-objetivo">
+                <option value="bulking">Bulking</option>
+                <option value="manutencao">Manutenção</option>
+                <option value="cutting">Cutting</option>
+              </select>
+            </label>
+          </div>
+
+          <button id="btn-calcular" type="button">Calcular plano</button>
+
+          <div id="calc-result"></div>
+        </div>
+      </div>
+
+      <section class="diet-builder">
+        <div class="diet-builder-header">
+          <div>
+            <span class="section-kicker">Monte sua dieta</span>
+            <h3>Simule refeições e compare com sua meta</h3>
+            <p>
+              Adicione alimentos, defina as quantidades e veja se sua dieta bate as calorias e os macronutrientes do seu
+              objetivo.
+            </p>
+          </div>
+
+          <button type="button" class="toggle-section-btn" data-target="diet-builder-content">
+            <span class="toggle-arrow">⌄</span>
+          </button>
+        </div>
+
+        <div id="diet-builder-content" class="collapsible">
+          <div class="diet-builder-form">
+            <div class="builder-field">
+              <label for="food-select">Alimento</label>
+              <select id="food-select">
+                <option value="">Selecione um alimento</option>
+              </select>
+            </div>
+
+            <div class="builder-field">
+              <label for="food-grams">Quantidade (g)</label>
+              <input type="number" id="food-grams" placeholder="Ex: 150" min="1" />
+            </div>
+
+            <div class="builder-action">
+              <button id="add-food-btn" type="button">Adicionar alimento</button>
+            </div>
+          </div>
+
+          <div class="diet-builder-table-wrapper">
+            <table class="diet-builder-table">
+              <thead>
+                <tr>
+                  <th>Alimento</th>
+                  <th>Qtd</th>
+                  <th>Kcal</th>
+                  <th>Prot.</th>
+                  <th>Carb.</th>
+                  <th>Gord.</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="diet-items-body">
+                <tr class="empty-row">
+                  <td colspan="7">Nenhum alimento adicionado ainda.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="diet-builder-summary">
+            <div class="summary-card">
+              <span>Calorias</span>
+              <strong id="total-kcal">0</strong>
+              <small>kcal</small>
+            </div>
+
+            <div class="summary-card">
+              <span>Proteína</span>
+              <strong id="total-protein">0</strong>
+              <small>g</small>
+            </div>
+
+            <div class="summary-card">
+              <span>Carboidratos</span>
+              <strong id="total-carbs">0</strong>
+              <small>g</small>
+            </div>
+
+            <div class="summary-card">
+              <span>Gorduras</span>
+              <strong id="total-fat">0</strong>
+              <small>g</small>
+            </div>
+          </div>
+
+          <div id="diet-goal-comparison" class="diet-goal-comparison">
+            <div class="comparison-empty">
+              Calcule sua meta acima para comparar a dieta montada com seu objetivo.
+            </div>
+          </div>
+
+          <div class="diet-save-section">
+            <input type="text" id="diet-title" placeholder="Nome da sua dieta (ex: Bulking 3000kcal)">
+
+            <button id="save-diet-btn" type="button">
+              Salvar dieta
+            </button>
+          </div>
+
+          <div class="comparison-empty">
+            Calcule sua meta acima para comparar a dieta montada com seu objetivo.
+          </div>
+        </div>
+        </div>
+      </section>
+
+      <!-- ── MOTIVAÇÃO ─────────────────────────────────────────────── -->
+      <section id="motivacao" class="motivation">
+        <h2>Histórias que Inspiram</h2>
+        <p class="motivation-subtitle">Pessoas reais que mudaram de vida através do esporte.</p>
+
+        <!-- BLOCO 1 -->
+        <div class="athlete-section">
+          <div class="athlete-image">
+            <img src="/static/assets/fotos/ramon.jpg" alt="Ramon Dino">
+          </div>
+
+          <div class="athlete-text">
+            <h3>Ramon Dino</h3>
+            <span>Primeiro Mr. Olympia Classic Brasileiro</span>
+
+            <p class="fade-in">
+              Ramon Dino, conhecido como “Dinossauro do Acre”, começou sua trajetória em Rio Branco, no Acre,
+              enfrentando muitas dificuldades.
+              Sem condições de pagar academia, iniciou treinando calistenia em praças e até no quintal de casa,
+              usando o próprio corpo e improvisando exercícios. Com poucos recursos, sua alimentação era simples,
+              muitas vezes baseada apenas em arroz e ovo, o que tinha disponível na época.
+            </p>
+
+            <p class="fade-in">
+              Mesmo assim, manteve disciplina e evolução constante até entrar no fisiculturismo, onde rapidamente se
+              destacou.
+              Com muito esforço e dedicação, Ramon superou as dificuldades, conquistou títulos importantes e se tornou
+              campeão do Mr. Olympia,
+              entrando para a história como um dos maiores fisiculturistas do Brasil.
+            </p>
+
+            <blockquote class="fade-in">
+              "Minha história nunca foi fácil... Mas nunca foi uma opção desistir"
+            </blockquote>
+          </div>
+        </div>
+
+        <!-- BLOCO 2 -->
+        <div class="athlete-section">
+          <div class="athlete-image">
+            <img src="/static/assets/fotos/David.jpg" alt="David Goggins">
+          </div>
+
+          <div class="athlete-text">
+            <h3>David Goggins</h3>
+            <span>Ex-militar e ultramaratonista</span>
+
+            <p class="fade-in">
+              David Goggins teve uma infância extremamente difícil, marcada por abusos, racismo e pobreza. Durante anos,
+              viveu no limite, trabalhando em empregos comuns e sem perspectiva, até chegar a pesar cerca de 140 kg.
+              Insatisfeito com sua realidade, tomou uma decisão radical de mudar de vida. Em poucos meses,
+              emagreceu drasticamente e enfrentou desafios extremos para entrar na Marinha dos EUA,
+              tornando-se um Navy SEAL uma das formações militares mais exigentes do mundo.
+            </p>
+
+            <p class="fade-in">
+              Ao longo dos anos, Goggins se consolidou como um símbolo de resistência mental, participando de
+              ultramaratonas,
+              provas de endurance e desafios físicos quase impossíveis.
+              Sua filosofia gira em torno de ultrapassar os próprios limites e fortalecer a mente acima de tudo.
+            </p>
+
+            <blockquote class="fade-in">
+              "Stay Hard"
+            </blockquote>
+          </div>
+        </div>
+
+        <!-- BLOCO 3 -->
+        <div class="athlete-section">
+          <div class="athlete-image">
+            <img src="/static/assets/fotos/jorlan.png" alt="Jorlan Vieira">
+          </div>
+
+          <div class="athlete-text">
+            <h3>Jorlan Vieira</h3>
+            <span>Fisiculturismo · Campeão Brasileiro</span>
+
+            <p class="fade-in">
+              Jorlan começou sua trajetória no fisiculturismo enfrentando dificuldades financeiras,
+              ajudando em casa enquanto vendia suplementos e treinava com muita dedicação. Inspirado por outros atletas,
+              evoluiu até competir pela primeira vez em 2002, conquistando o 3º lugar no Mr. Rio. Determinado,
+              abriu mão de distrações para focar totalmente no esporte, tornando-se bicampeão juvenil do Mr. Rio e
+              campeão brasileiro.
+            </p>
+
+            <p class="fade-in">
+              Mesmo enfrentando grandes desafios pessoais, como problemas de saúde graves na família e a falta de
+              patrocínio, continuou firme,
+              trabalhando como personal trainer e cuidando dos pais. Representante da geração old school do
+              fisiculturismo,
+              Jorlan se reinventou ao longo do tempo para se manter relevante, consolidando sua trajetória marcada por
+              superação,
+              disciplina e paixão pelo esporte.
+            </p>
+
+            <blockquote class="fade-in">
+              "Não existe plano B na vida"
+            </blockquote>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="about-section" id="sobre">
+        <div class="about-container">
+
+          <!-- PERFIL DO CRIADOR -->
+          <div class="about-profile">
+            <img src="/static/assets/fotos/profile.jpg" alt="Criador do site">
+
+            <div class="about-profile-info">
+              <h3>Diogo Tonon</h3>
+              <span>Desenvolvedor do GymGuide</span>
+
+              <p>
+                Projeto desenvolvido como parte de estudos em Análise e Desenvolvimento de Sistemas,
+                com foco em criar uma aplicação funcional, moderna e voltada para o dia a dia de quem treina.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+  </main>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────── -->
+  <footer class="footer">
+    <p>© 2026 GymGuide</p>
+  </footer>
+
+  <script src="/static/js/data/alimentosdata.js"></script>
+  <script src="/static/js/data/fichasdata.js"></script>
+  <script src="/static/js/data/exerciciosdata.js"></script>
+
+  <script src="/static/js/animacoes.js"></script>
+  <script src="/static/js/fichas.js"></script>
+  <script src="/static/js/exercicios.js"></script>
+  <script src="/static/js/dieta.js"></script>
+  <script src="/static/js/favoritos.js"></script>
+
+</body>
+
+</html>
